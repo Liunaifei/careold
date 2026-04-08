@@ -22,6 +22,11 @@
             font-size: 16px;
         }
         
+        /* 确保所有文本元素继承body的字体大小 */
+        * {
+            font-size: inherit;
+        }
+        
         .app-container {
             width: 100%;
             max-width: 390px;
@@ -53,7 +58,7 @@
         }
         
         .nav-title {
-            font-size: 18px;
+            font-size: 1.125em;
             font-weight: 600;
             color: #333333;
         }
@@ -63,7 +68,7 @@
             border: none;
             border-radius: 12px;
             padding: 10px 20px;
-            font-size: 16px;
+            font-size: 1em;
             font-weight: 600;
             color: #4CAF50;
             cursor: pointer;
@@ -102,14 +107,14 @@
         }
         
         .news-item h3 {
-            font-size: 18px;
+            font-size: 1.125em;
             font-weight: 600;
             color: #333333;
             margin-bottom: 8px;
         }
         
         .news-item p {
-            font-size: 16px;
+            font-size: 1em;
             color: #666666;
         }
         
@@ -251,7 +256,7 @@
         }
         
         .hint-text {
-            font-size: 18px;
+            font-size: 1.125em;
             font-weight: 600;
             text-align: center;
             line-height: 1.2;
@@ -287,11 +292,11 @@
         }
         
         .quick-icon {
-            font-size: 40px;
+            font-size: 2.5em;
         }
         
         .quick-text {
-            font-size: 18px;
+            font-size: 1.125em;
             font-weight: 600;
             color: #333333;
         }
@@ -365,7 +370,7 @@
         }
         
         .features-title {
-            font-size: 18px;
+            font-size: 1.125em;
             font-weight: 600;
             color: #333333;
             margin-bottom: 20px;
@@ -406,12 +411,12 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            font-size: 32px;
+            font-size: 2em;
             color: #4CAF50;
         }
         
         .feature-text {
-            font-size: 16px;
+            font-size: 1em;
             color: #333333;
             font-weight: 500;
             text-align: center;
@@ -452,7 +457,7 @@
         }
         
         .nav-text {
-            font-size: 14px;
+            font-size: 0.875em;
             color: #666666;
             font-weight: 500;
         }
@@ -471,7 +476,7 @@
         }
         
         .accessibility-title {
-            font-size: 18px;
+            font-size: 1.125em;
             font-weight: 600;
             color: #333333;
             margin-bottom: 20px;
@@ -494,7 +499,7 @@
         }
         
         .option-label {
-            font-size: 16px;
+            font-size: 1em;
             font-weight: 500;
             color: #333333;
         }
@@ -520,14 +525,14 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            font-size: 18px;
+            font-size: 1.125em;
             font-weight: 600;
             color: #4CAF50;
             cursor: pointer;
         }
         
         .font-size-display {
-            font-size: 16px;
+            font-size: 1em;
             font-weight: 500;
             min-width: 40px;
             text-align: center;
@@ -623,29 +628,12 @@
                 </button>
             </div>
             
-            <!-- 自动模式设置 -->
-            <div class="auto-mode-section">
-                <div class="auto-mode-title">开启自动检测和自动回复模式</div>
-                <div class="toggle-container">
-                    <div class="toggle-button" id="autoModeToggle">
-                        <div class="toggle-slider"></div>
-                    </div>
-                    <div class="status-indicator" id="autoModeStatus">已关闭</div>
-                </div>
-            </div>
+
             
             <!-- 功能模块区域 -->
             <div class="features-section">
                 <div class="features-title">智能功能</div>
                 <div class="features-grid">
-                    <div class="feature-item" id="voiceRecognition" onclick="toggleFeature('voiceRecognition')">
-                        <div class="feature-icon">📱</div>
-                        <div class="feature-text">智能语音识别</div>
-                    </div>
-                    <div class="feature-item" id="autoReply" onclick="toggleFeature('autoReply')">
-                        <div class="feature-icon">🤖</div>
-                        <div class="feature-text">自动回复消息</div>
-                    </div>
                     <div class="feature-item" id="statusDetection" onclick="toggleFeature('statusDetection')">
                         <div class="feature-icon">⏰</div>
                         <div class="feature-text">实时检测状态</div>
@@ -653,6 +641,29 @@
                     <div class="feature-item" id="privacyMode" onclick="toggleFeature('privacyMode')">
                         <div class="feature-icon">🔒</div>
                         <div class="feature-text">隐私保护模式</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 线上问诊功能 -->
+            <div class="features-section">
+                <div class="features-title">线上问诊</div>
+                <div class="features-grid">
+                    <div class="feature-item" onclick="showDoctorList()">
+                        <div class="feature-icon">👨‍⚕️</div>
+                        <div class="feature-text">医生列表</div>
+                    </div>
+                    <div class="feature-item" onclick="bookAppointment()">
+                        <div class="feature-icon">📅</div>
+                        <div class="feature-text">问诊预约</div>
+                    </div>
+                    <div class="feature-item" onclick="onlineConsultation()">
+                        <div class="feature-icon">💬</div>
+                        <div class="feature-text">在线咨询</div>
+                    </div>
+                    <div class="feature-item" onclick="viewConsultationRecords()">
+                        <div class="feature-icon">📋</div>
+                        <div class="feature-text">问诊记录</div>
                     </div>
                 </div>
             </div>
@@ -780,33 +791,50 @@
             }, 2000);
         }
         
-        // 自动模式功能
-        const toggleButton = document.getElementById('autoModeToggle');
-        const statusIndicator = document.getElementById('autoModeStatus');
-        let isAutoMode = false;
+        // 线上问诊功能
+        function showDoctorList() {
+            showFeedback('正在加载医生列表...');
+            
+            setTimeout(() => {
+                showFeedback('医生列表已加载\n1. 王医生 - 内科\n2. 李医生 - 儿科\n3. 张医生 - 外科\n4. 刘医生 - 心理科');
+            }, 1500);
+        }
         
-        toggleButton.addEventListener('click', function() {
-            // 切换状态
-            isAutoMode = !isAutoMode;
+        function bookAppointment() {
+            showFeedback('正在进入预约系统...');
             
-            // 更新UI状态
-            if (isAutoMode) {
-                toggleButton.classList.add('active');
-                statusIndicator.classList.add('active');
-                statusIndicator.textContent = '已开启';
-                showFeedback('自动模式已开启');
-            } else {
-                toggleButton.classList.remove('active');
-                statusIndicator.classList.remove('active');
-                statusIndicator.textContent = '已关闭';
-                showFeedback('自动模式已关闭');
-            }
+            setTimeout(() => {
+                const doctor = prompt('请选择医生编号:\n1. 王医生\n2. 李医生\n3. 张医生\n4. 刘医生');
+                if (doctor) {
+                    const time = prompt('请选择预约时间（格式：年-月-日 时:分）');
+                    if (time) {
+                        showFeedback('预约成功！\n医生：' + ['王医生', '李医生', '张医生', '刘医生'][doctor-1] + '\n时间：' + time);
+                    }
+                }
+            }, 1500);
+        }
+        
+        function onlineConsultation() {
+            showFeedback('正在进入在线咨询...');
             
-            // 模拟触觉反馈
-            if ('vibrate' in navigator) {
-                navigator.vibrate(50);
-            }
-        });
+            setTimeout(() => {
+                const question = prompt('请输入您的问题：');
+                if (question) {
+                    showFeedback('正在为您咨询医生...');
+                    setTimeout(() => {
+                        showFeedback('医生回复：\n感谢您的咨询，建议您注意休息，保持良好的作息习惯。如症状持续，请及时就医。');
+                    }, 2000);
+                }
+            }, 1500);
+        }
+        
+        function viewConsultationRecords() {
+            showFeedback('正在加载问诊记录...');
+            
+            setTimeout(() => {
+                showFeedback('问诊记录\n1. 2026-04-01 - 王医生 - 内科\n2. 2026-03-15 - 李医生 - 儿科\n3. 2026-03-01 - 张医生 - 外科');
+            }, 1500);
+        }
         
         // 功能模块切换
         function toggleFeature(featureId) {
@@ -898,7 +926,7 @@
             feedback.style.color = 'white';
             feedback.style.padding = '20px 30px';
             feedback.style.borderRadius = '12px';
-            feedback.style.fontSize = '18px';
+            feedback.style.fontSize = '1.125em';
             feedback.style.fontWeight = '600';
             feedback.style.zIndex = '1000';
             feedback.style.opacity = '0';
