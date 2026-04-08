@@ -1,0 +1,944 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>养老情感陪伴助手 - 老人端</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background-color: #f5f5f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            transition: opacity 0.5s ease;
+            font-size: 16px;
+        }
+        
+        .app-container {
+            width: 100%;
+            max-width: 390px;
+            height: 844px;
+            background-color: #ffffff;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .status-bar {
+            height: 44px;
+            background-color: #ffffff;
+            position: relative;
+            z-index: 10;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        /* 顶部导航栏 */
+        .top-nav {
+            height: 60px;
+            background-color: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        .nav-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #333333;
+        }
+        
+        .back-button {
+            background-color: #e8f5e8;
+            border: none;
+            border-radius: 12px;
+            padding: 10px 20px;
+            font-size: 16px;
+            font-weight: 600;
+            color: #4CAF50;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-width: 100px;
+            text-align: center;
+        }
+        
+        .back-button:hover {
+            background-color: #d4edda;
+            transform: translateY(-2px);
+        }
+        
+        /* 顶部资讯滚动区域 */
+        .news-section {
+            position: relative;
+            height: 120px;
+            background-color: #f0f8ff;
+            overflow: hidden;
+        }
+        
+        .news-container {
+            display: flex;
+            height: 100%;
+            transition: transform 0.5s ease;
+        }
+        
+        .news-item {
+            min-width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 0 20px;
+        }
+        
+        .news-item h3 {
+            font-size: 18px;
+            font-weight: 600;
+            color: #333333;
+            margin-bottom: 8px;
+        }
+        
+        .news-item p {
+            font-size: 16px;
+            color: #666666;
+        }
+        
+        .news-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 40px;
+            height: 40px;
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+        
+        .news-nav.left {
+            left: 10px;
+        }
+        
+        .news-nav.right {
+            right: 10px;
+        }
+        
+        .content {
+            padding: 20px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+            overflow-y: auto;
+        }
+        
+        /* 主要功能按钮 */
+        .main-button-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+        
+        .main-button {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #4CAF50, #45a049);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 12px 24px rgba(76, 175, 80, 0.3);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 4px solid white;
+            min-width: 200px;
+        }
+        
+        .main-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 15px 30px rgba(76, 175, 80, 0.4);
+        }
+        
+        .main-button:active {
+            transform: scale(0.95);
+        }
+        
+        .icon-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: white;
+        }
+        
+        .mic-icon {
+            width: 56px;
+            height: 56px;
+            background-color: white;
+            border-radius: 50%;
+            position: relative;
+            margin-bottom: 12px;
+        }
+        
+        .mic-icon::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 20px;
+            height: 28px;
+            background-color: #4CAF50;
+            border-radius: 10px;
+        }
+        
+        .mic-icon::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 28px;
+            height: 10px;
+            background-color: #4CAF50;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+        
+        .speaker-icon {
+            width: 40px;
+            height: 40px;
+            position: relative;
+            margin-bottom: 16px;
+        }
+        
+        .speaker-icon::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 24px;
+            height: 24px;
+            background-color: white;
+            border-radius: 50%;
+        }
+        
+        .speaker-icon::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 32px;
+            height: 32px;
+            border: 4px solid white;
+            border-radius: 50%;
+        }
+        
+        .hint-text {
+            font-size: 18px;
+            font-weight: 600;
+            text-align: center;
+            line-height: 1.2;
+        }
+        
+        /* 快捷功能按钮 */
+        .quick-buttons {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            width: 100%;
+        }
+        
+        .quick-button {
+            background-color: #ffffff;
+            border: 2px solid #e0e0e0;
+            border-radius: 20px;
+            padding: 30px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+            min-height: 150px;
+        }
+        
+        .quick-button:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            border-color: #4CAF50;
+        }
+        
+        .quick-icon {
+            font-size: 40px;
+        }
+        
+        .quick-text {
+            font-size: 18px;
+            font-weight: 600;
+            color: #333333;
+        }
+        
+        /* 自动模式设置 */
+        .auto-mode-section {
+            background-color: #f8f9fa;
+            border-radius: 20px;
+            padding: 30px 20px;
+            text-align: center;
+        }
+        
+        .auto-mode-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #333333;
+            margin-bottom: 20px;
+        }
+        
+        .toggle-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 30px;
+        }
+        
+        .toggle-button {
+            position: relative;
+            width: 100px;
+            height: 56px;
+            background-color: #e0e0e0;
+            border-radius: 28px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        
+        .toggle-button.active {
+            background-color: #4CAF50;
+        }
+        
+        .toggle-slider {
+            position: absolute;
+            top: 4px;
+            left: 4px;
+            width: 48px;
+            height: 48px;
+            background-color: white;
+            border-radius: 50%;
+            transition: transform 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+        
+        .toggle-button.active .toggle-slider {
+            transform: translateX(44px);
+        }
+        
+        .status-indicator {
+            font-size: 20px;
+            font-weight: 600;
+            color: #666666;
+            transition: color 0.3s ease;
+        }
+        
+        .status-indicator.active {
+            color: #4CAF50;
+        }
+        
+        /* 功能模块区域 */
+        .features-section {
+            width: 100%;
+        }
+        
+        .features-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #333333;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+        
+        .feature-item {
+            background-color: #ffffff;
+            border: 2px solid #e0e0e0;
+            border-radius: 20px;
+            padding: 25px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+            min-height: 140px;
+        }
+        
+        .feature-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            border-color: #4CAF50;
+        }
+        
+        .feature-icon {
+            width: 64px;
+            height: 64px;
+            border-radius: 20px;
+            background-color: #e8f5e8;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 32px;
+            color: #4CAF50;
+        }
+        
+        .feature-text {
+            font-size: 16px;
+            color: #333333;
+            font-weight: 500;
+            text-align: center;
+        }
+        
+        .feature-item.hidden {
+            opacity: 0;
+            transform: translateY(20px);
+            height: 0;
+            padding: 0 20px;
+            margin: 0;
+            overflow: hidden;
+        }
+        
+        /* 底部导航 */
+        .bottom-nav {
+            height: 70px;
+            background-color: #ffffff;
+            border-top: 1px solid #e0e0e0;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding: 0 20px;
+        }
+        
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+            min-width: 80px;
+        }
+        
+        .nav-icon {
+            font-size: 24px;
+            color: #666666;
+        }
+        
+        .nav-text {
+            font-size: 14px;
+            color: #666666;
+            font-weight: 500;
+        }
+        
+        .nav-item.active .nav-icon,
+        .nav-item.active .nav-text {
+            color: #4CAF50;
+        }
+        
+        /* 适老化设置 */
+        .accessibility-section {
+            background-color: #f0f0f0;
+            border-radius: 20px;
+            padding: 25px 20px;
+            margin-top: 20px;
+        }
+        
+        .accessibility-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #333333;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .accessibility-options {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .accessibility-option {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            background-color: white;
+            border-radius: 12px;
+        }
+        
+        .option-label {
+            font-size: 16px;
+            font-weight: 500;
+            color: #333333;
+        }
+        
+        .option-control {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .font-size-control {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .font-size-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #e8f5e8;
+            border: none;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 18px;
+            font-weight: 600;
+            color: #4CAF50;
+            cursor: pointer;
+        }
+        
+        .font-size-display {
+            font-size: 16px;
+            font-weight: 500;
+            min-width: 40px;
+            text-align: center;
+        }
+        
+        /* 响应式调整 */
+        @media (max-width: 400px) {
+            .app-container {
+                width: 100vw;
+                height: 100vh;
+            }
+            
+            .content {
+                padding: 15px;
+                gap: 20px;
+            }
+            
+            .main-button {
+                width: 180px;
+                height: 180px;
+            }
+            
+            .quick-button {
+                padding: 25px 15px;
+                min-height: 130px;
+            }
+            
+            .feature-item {
+                padding: 20px 15px;
+                min-height: 120px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <div class="status-bar"></div>
+        
+        <!-- 顶部导航栏 -->
+        <div class="top-nav">
+            <button class="back-button" onclick="navigateToPage('index.html')">返回首页</button>
+            <div class="nav-title">老人端</div>
+            <div style="width: 100px;"></div>
+        </div>
+        
+        <!-- 顶部资讯滚动区域 -->
+        <div class="news-section">
+            <div class="news-container" id="newsContainer">
+                <div class="news-item">
+                    <div>
+                        <h3>温馨提示</h3>
+                        <p>今日天气晴朗，适合户外活动</p>
+                    </div>
+                </div>
+                <div class="news-item">
+                    <div>
+                        <h3>健康提醒</h3>
+                        <p>记得按时服药，保持良好作息</p>
+                    </div>
+                </div>
+                <div class="news-item">
+                    <div>
+                        <h3>亲情连线</h3>
+                        <p>子女今天会来看望您</p>
+                    </div>
+                </div>
+            </div>
+            <div class="news-nav left" onclick="scrollNews(-1)">&lt;</div>
+            <div class="news-nav right" onclick="scrollNews(1)">&gt;</div>
+        </div>
+        
+        <div class="content">
+            <!-- 主要功能按钮 -->
+            <div class="main-button-section">
+                <div class="main-button" onclick="startVoiceInteraction()">
+                    <div class="icon-container">
+                        <div class="mic-icon"></div>
+                        <div class="speaker-icon"></div>
+                        <div class="hint-text">按住按钮和我对话吧~</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 快捷功能按钮 -->
+            <div class="quick-buttons">
+                <button class="quick-button" onclick="openTextInput()">
+                    <div class="quick-icon">✏️</div>
+                    <div class="quick-text">文字输入</div>
+                </button>
+                <button class="quick-button" onclick="connectWithFamily()">
+                    <div class="quick-icon">👨‍👩‍👧‍👦</div>
+                    <div class="quick-text">连线子女</div>
+                </button>
+            </div>
+            
+            <!-- 自动模式设置 -->
+            <div class="auto-mode-section">
+                <div class="auto-mode-title">开启自动检测和自动回复模式</div>
+                <div class="toggle-container">
+                    <div class="toggle-button" id="autoModeToggle">
+                        <div class="toggle-slider"></div>
+                    </div>
+                    <div class="status-indicator" id="autoModeStatus">已关闭</div>
+                </div>
+            </div>
+            
+            <!-- 功能模块区域 -->
+            <div class="features-section">
+                <div class="features-title">智能功能</div>
+                <div class="features-grid">
+                    <div class="feature-item" id="voiceRecognition" onclick="toggleFeature('voiceRecognition')">
+                        <div class="feature-icon">📱</div>
+                        <div class="feature-text">智能语音识别</div>
+                    </div>
+                    <div class="feature-item" id="autoReply" onclick="toggleFeature('autoReply')">
+                        <div class="feature-icon">🤖</div>
+                        <div class="feature-text">自动回复消息</div>
+                    </div>
+                    <div class="feature-item" id="statusDetection" onclick="toggleFeature('statusDetection')">
+                        <div class="feature-icon">⏰</div>
+                        <div class="feature-text">实时检测状态</div>
+                    </div>
+                    <div class="feature-item" id="privacyMode" onclick="toggleFeature('privacyMode')">
+                        <div class="feature-icon">🔒</div>
+                        <div class="feature-text">隐私保护模式</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 适老化设置 -->
+            <div class="accessibility-section">
+                <div class="accessibility-title">适老化设置</div>
+                <div class="accessibility-options">
+                    <div class="accessibility-option">
+                        <div class="option-label">字体大小</div>
+                        <div class="font-size-control">
+                            <button class="font-size-btn" onclick="adjustFontSize(-1)">-</button>
+                            <div class="font-size-display" id="fontSizeDisplay">中</div>
+                            <button class="font-size-btn" onclick="adjustFontSize(1)">+</button>
+                        </div>
+                    </div>
+                    <div class="accessibility-option">
+                        <div class="option-label">防蓝光模式</div>
+                        <div class="option-control">
+                            <div class="toggle-button" id="blueLightToggle" onclick="toggleBlueLightMode()">
+                                <div class="toggle-slider"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accessibility-option">
+                        <div class="option-label">语音提示</div>
+                        <div class="option-control">
+                            <div class="toggle-button" id="voicePromptToggle" onclick="toggleVoicePrompt()">
+                                <div class="toggle-slider"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="bottom-nav">
+            <div class="nav-item active">
+                <div class="nav-icon">🏠</div>
+                <div class="nav-text">首页</div>
+            </div>
+            <div class="nav-item">
+                <div class="nav-icon">💬</div>
+                <div class="nav-text">AI咨询</div>
+            </div>
+            <div class="nav-item">
+                <div class="nav-icon">👤</div>
+                <div class="nav-text">我的</div>
+            </div>
+        </div>
+    </div>
+    <script>
+        // 页面跳转函数
+        function navigateToPage(url) {
+            // 添加页面过渡效果
+            document.body.style.opacity = '0';
+            document.body.style.transition = 'opacity 0.5s ease';
+            
+            setTimeout(() => {
+                window.location.href = url;
+            }, 500);
+        }
+        
+        // 资讯滚动功能
+        let currentNewsIndex = 0;
+        const newsContainer = document.getElementById('newsContainer');
+        const newsItems = newsContainer.children;
+        
+        function scrollNews(direction) {
+            currentNewsIndex = (currentNewsIndex + direction + newsItems.length) % newsItems.length;
+            updateNewsPosition();
+            
+            // 语音提示
+            if (isVoicePromptEnabled) {
+                speakNewsItem(currentNewsIndex);
+            }
+        }
+        
+        function updateNewsPosition() {
+            newsContainer.style.transform = `translateX(-${currentNewsIndex * 100}%)`;
+        }
+        
+        // 自动滚动资讯
+        setInterval(() => {
+            scrollNews(1);
+        }, 5000);
+        
+        // 语音交互功能
+        function startVoiceInteraction() {
+            // 模拟语音交互
+            showFeedback('开始语音交互...');
+            
+            // 模拟语音识别过程
+            setTimeout(() => {
+                showFeedback('正在识别...');
+            }, 1000);
+            
+            setTimeout(() => {
+                showFeedback('识别完成，正在回复...');
+            }, 3000);
+            
+            setTimeout(() => {
+                showFeedback('您好！有什么可以帮助您的吗？');
+            }, 5000);
+        }
+        
+        // 文字输入功能
+        function openTextInput() {
+            const text = prompt('请输入您的问题：');
+            if (text) {
+                showFeedback('正在处理您的问题...');
+                
+                setTimeout(() => {
+                    showFeedback(`您输入的是：${text}`);
+                }, 2000);
+            }
+        }
+        
+        // 连线子女功能
+        function connectWithFamily() {
+            showFeedback('正在连线子女...');
+            
+            setTimeout(() => {
+                showFeedback('连线成功！');
+            }, 2000);
+        }
+        
+        // 自动模式功能
+        const toggleButton = document.getElementById('autoModeToggle');
+        const statusIndicator = document.getElementById('autoModeStatus');
+        let isAutoMode = false;
+        
+        toggleButton.addEventListener('click', function() {
+            // 切换状态
+            isAutoMode = !isAutoMode;
+            
+            // 更新UI状态
+            if (isAutoMode) {
+                toggleButton.classList.add('active');
+                statusIndicator.classList.add('active');
+                statusIndicator.textContent = '已开启';
+                showFeedback('自动模式已开启');
+            } else {
+                toggleButton.classList.remove('active');
+                statusIndicator.classList.remove('active');
+                statusIndicator.textContent = '已关闭';
+                showFeedback('自动模式已关闭');
+            }
+            
+            // 模拟触觉反馈
+            if ('vibrate' in navigator) {
+                navigator.vibrate(50);
+            }
+        });
+        
+        // 功能模块切换
+        function toggleFeature(featureId) {
+            const feature = document.getElementById(featureId);
+            feature.classList.toggle('active');
+            
+            // 模拟功能切换
+            showFeedback(`${feature.querySelector('.feature-text').textContent} ${feature.classList.contains('active') ? '已开启' : '已关闭'}`);
+        }
+        
+        // 适老化设置
+        let fontSize = 16; // 基础字体大小
+        let isBlueLightMode = false;
+        let isVoicePromptEnabled = false;
+        
+        // 字体大小调整
+        function adjustFontSize(direction) {
+            const fontSizeDisplay = document.getElementById('fontSizeDisplay');
+            const fontSizes = [14, 16, 18, 20];
+            let currentIndex = fontSizes.indexOf(fontSize);
+            
+            currentIndex = (currentIndex + direction + fontSizes.length) % fontSizes.length;
+            fontSize = fontSizes[currentIndex];
+            
+            // 更新字体大小
+            document.body.style.fontSize = fontSize + 'px';
+            
+            // 更新显示
+            const sizeLabels = ['小', '中', '大', '特大'];
+            fontSizeDisplay.textContent = sizeLabels[currentIndex];
+            
+            showFeedback(`字体大小已调整为${sizeLabels[currentIndex]}`);
+        }
+        
+        // 防蓝光模式
+        function toggleBlueLightMode() {
+            const blueLightToggle = document.getElementById('blueLightToggle');
+            isBlueLightMode = !isBlueLightMode;
+            
+            if (isBlueLightMode) {
+                blueLightToggle.classList.add('active');
+                document.body.style.filter = 'sepia(0.3)';
+                showFeedback('防蓝光模式已开启');
+            } else {
+                blueLightToggle.classList.remove('active');
+                document.body.style.filter = 'none';
+                showFeedback('防蓝光模式已关闭');
+            }
+        }
+        
+        // 语音提示
+        function toggleVoicePrompt() {
+            const voicePromptToggle = document.getElementById('voicePromptToggle');
+            isVoicePromptEnabled = !isVoicePromptEnabled;
+            
+            if (isVoicePromptEnabled) {
+                voicePromptToggle.classList.add('active');
+                showFeedback('语音提示已开启');
+            } else {
+                voicePromptToggle.classList.remove('active');
+                showFeedback('语音提示已关闭');
+            }
+        }
+        
+        // 语音合成功能
+        function speakNewsItem(index) {
+            if ('speechSynthesis' in window && isVoicePromptEnabled) {
+                const newsItem = newsItems[index];
+                const title = newsItem.querySelector('h3').textContent;
+                const content = newsItem.querySelector('p').textContent;
+                const message = `${title}，${content}`;
+                
+                const speech = new SpeechSynthesisUtterance(message);
+                speech.lang = 'zh-CN';
+                speech.rate = 0.9; // 语速稍慢，适合老人
+                speechSynthesis.speak(speech);
+            }
+        }
+        
+        // 操作反馈功能
+        function showFeedback(message) {
+            // 创建反馈元素
+            const feedback = document.createElement('div');
+            feedback.style.position = 'fixed';
+            feedback.style.top = '50%';
+            feedback.style.left = '50%';
+            feedback.style.transform = 'translate(-50%, -50%)';
+            feedback.style.backgroundColor = 'rgba(0, 0, 0, 0.8)';
+            feedback.style.color = 'white';
+            feedback.style.padding = '20px 30px';
+            feedback.style.borderRadius = '12px';
+            feedback.style.fontSize = '18px';
+            feedback.style.fontWeight = '600';
+            feedback.style.zIndex = '1000';
+            feedback.style.opacity = '0';
+            feedback.style.transition = 'opacity 0.3s ease';
+            feedback.textContent = message;
+            
+            document.body.appendChild(feedback);
+            
+            // 显示反馈
+            setTimeout(() => {
+                feedback.style.opacity = '1';
+            }, 10);
+            
+            // 隐藏反馈
+            setTimeout(() => {
+                feedback.style.opacity = '0';
+                setTimeout(() => {
+                    feedback.remove();
+                }, 300);
+            }, 2000);
+            
+            // 语音反馈
+            if (isVoicePromptEnabled && 'speechSynthesis' in window) {
+                const speech = new SpeechSynthesisUtterance(message);
+                speech.lang = 'zh-CN';
+                speech.rate = 0.9;
+                speechSynthesis.speak(speech);
+            }
+        }
+        
+        // 初始化
+        window.onload = function() {
+            // 初始化字体大小
+            document.body.style.fontSize = fontSize + 'px';
+            
+            // 显示欢迎消息
+            setTimeout(() => {
+                showFeedback('欢迎使用养老情感陪伴助手');
+            }, 1000);
+        };
+    </script>
+</body>
+</html>

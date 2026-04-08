@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>养老情感陪伴助手</title>
+    <style>
+        /* 全局样式 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'PingFang SC', 'Helvetica Neue', Arial, sans-serif;
+            background-color: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            transition: background-color 0.5s ease;
+        }
+
+        /* 手机容器，适配9:21比例 */
+        .phone-container {
+            width: 375px;
+            height: 875px; /* 375 * 2.333 (约9:21) */
+            background-color: white;
+            border-radius: 40px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            padding: 60px 30px;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.5s ease;
+        }
+
+        /* 标题 */
+        .app-title {
+            text-align: center;
+            margin-bottom: 80px;
+        }
+
+        .app-title h1 {
+            font-size: 28px;
+            font-weight: 300;
+            color: #333;
+            letter-spacing: 2px;
+        }
+
+        /* 登录板块容器 */
+        .login-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 30px;
+        }
+
+        /* 登录板块 */
+        .login-section {
+            background-color: #ffffff;
+            border-radius: 20px;
+            padding: 40px 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid #eaeaea;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .login-section:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+        }
+
+        .login-section:active {
+            transform: translateY(-4px) scale(0.98);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            transition: all 0.1s ease;
+        }
+
+        .login-section h2 {
+            font-size: 24px;
+            font-weight: 400;
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        .login-section p {
+            font-size: 14px;
+            color: #999;
+            letter-spacing: 1px;
+        }
+
+        /* 底部用户须知 */
+        .user-notice {
+            margin-top: 60px;
+            text-align: center;
+        }
+
+        .user-notice p {
+            font-size: 12px;
+            color: #ccc;
+            line-height: 1.6;
+            letter-spacing: 0.5px;
+        }
+
+        /* 响应式调整 */
+        @media (max-width: 400px) {
+            .phone-container {
+                width: 100vw;
+                height: 100vh;
+                border-radius: 0;
+                padding: 40px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="phone-container">
+        <!-- 应用标题 -->
+        <div class="app-title">
+            <h1 style="font-weight: bold;">养老情感陪伴助手</h1>
+            <p style="font-size: 18px; color: #999; margin-top: 10px; font-weight: 500; font-style: italic;">careOld</p >
+        </div>
+
+        <!-- 登录板块 -->
+        <div class="login-container">
+            <div class="login-section" data-type="user">
+                <h2>用户</h2>
+                <p>老年用户入口</p >
+            </div>
+            <div class="login-section" data-type="family">
+                <h2>家属</h2>
+                <p>家属入口</p >
+            </div>
+        </div>
+
+        <!-- 底部用户须知 -->
+        <div class="user-notice">
+            <p>© 2024 养老情感陪伴助手</p >
+            <p>用心陪伴，温暖晚年</p >
+        </div>
+    </div>
+
+    <script>
+        // 页面跳转函数
+        function navigateToPage(url) {
+            // 添加页面过渡效果
+            document.body.style.opacity = '0';
+            document.body.style.transition = 'opacity 0.5s ease';
+            
+            setTimeout(() => {
+                window.location.href = url;
+            }, 500);
+        }
+
+        // 绑定点击事件
+        document.querySelectorAll('.login-section').forEach(section => {
+            section.addEventListener('click', function() {
+                const type = this.dataset.type;
+                
+                // 添加点击时的波纹效果
+                const ripple = document.createElement('div');
+                const rect = this.getBoundingClientRect();
+                const size = Math.max(rect.width, rect.height);
+                const x = event.clientX - rect.left - size / 2;
+                const y = event.clientY - rect.top - size / 2;
+                
+                ripple.style.position = 'absolute';
+                ripple.style.left = x + 'px';
+                ripple.style.top = y + 'px';
+                ripple.style.width = size + 'px';
+                ripple.style.height = size + 'px';
+                ripple.style.borderRadius = '50%';
+                ripple.style.background = 'rgba(255, 255, 255, 0.3)';
+                ripple.style.transform = 'scale(0)';
+                ripple.style.animation = 'ripple 0.6s ease-out';
+                ripple.style.pointerEvents = 'none';
+                
+                this.appendChild(ripple);
+                
+                setTimeout(() => {
+                    ripple.remove();
+                }, 600);
+                
+                // 延迟跳转，等待波纹效果
+                setTimeout(() => {
+                    if (type === 'user') {
+                        navigateToPage('old.html');
+                    } else {
+                        navigateToPage('family.html');
+                    }
+                }, 300);
+            });
+        });
+
+        // 添加波纹动画
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes ripple {
+                to {
+                    transform: scale(2);
+                    opacity: 0;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>

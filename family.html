@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>养老情感陪伴助手 - 家属端</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        background-color: #f5f5f5;
+        color: #333;
+        transition: opacity 0.5s ease;
+      }
+      
+      .app {
+        width: 100%;
+        max-width: 390px;
+        height: 844px;
+        margin: 0 auto;
+        background-color: white;
+        position: relative;
+        overflow: hidden;
+      }
+      
+      /* 顶部导航栏 */
+      .top-nav {
+        height: 50px;
+        background-color: #f8f9fa;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 20px;
+        border-bottom: 1px solid #e0e0e0;
+      }
+      
+      .nav-title {
+        font-size: 16px;
+        font-weight: 600;
+      }
+      
+      .back-button {
+        background-color: #e3f2fd;
+        border: none;
+        border-radius: 8px;
+        padding: 8px 16px;
+        font-size: 14px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+      
+      .back-button:hover {
+        background-color: #bbdefb;
+        transform: translateY(-2px);
+      }
+      
+      /* 顶部资讯滚动区域 */
+      .news-section {
+        position: relative;
+        height: 120px;
+        background-color: #f0f8ff;
+        overflow: hidden;
+      }
+      
+      .news-container {
+        display: flex;
+        height: 100%;
+        transition: transform 0.5s ease;
+      }
+      
+      .news-item {
+        min-width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        padding: 0 20px;
+      }
+      
+      .news-nav {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 30px;
+        height: 30px;
+        background-color: rgba(255, 255, 255, 0.8);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+      }
+      
+      .news-nav.left {
+        left: 10px;
+      }
+      
+      .news-nav.right {
+        right: 10px;
+      }
+      
+      /* 功能方块区域 */
+      .features-section {
+        padding: 20px;
+      }
+      
+      .features-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 15px;
+      }
+      
+      .feature-item {
+        aspect-ratio: 1;
+        background-color: #f8f9fa;
+        border-radius: 12px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 10px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+      
+      .feature-icon {
+        font-size: 24px;
+        margin-bottom: 8px;
+      }
+      
+      .feature-label {
+        font-size: 12px;
+        text-align: center;
+      }
+      
+      /* 月报区域 */
+      .report-section {
+        padding: 0 20px 20px;
+      }
+      
+      .report-card {
+        background-color: #e3f2fd;
+        border-radius: 12px;
+        padding: 20px;
+        text-align: center;
+        cursor: pointer;
+      }
+      
+      /* 知识推送区域 */
+      .knowledge-section {
+        padding: 0 20px 20px;
+        max-height: 200px;
+        overflow-y: auto;
+      }
+      
+      .knowledge-item {
+        background-color: #f8f9fa;
+        border-radius: 8px;
+        padding: 15px;
+        margin-bottom: 10px;
+      }
+      
+      .knowledge-title {
+        font-size: 14px;
+        font-weight: 600;
+        margin-bottom: 5px;
+      }
+      
+      .knowledge-content {
+        font-size: 12px;
+        color: #666;
+      }
+      
+      /* 底部菜单 */
+      .bottom-menu {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 60px;
+        background-color: white;
+        border-top: 1px solid #e0e0e0;
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+      }
+      
+      .menu-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        font-size: 12px;
+        cursor: pointer;
+      }
+      
+      .menu-icon {
+        font-size: 20px;
+        margin-bottom: 4px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app">
+      <!-- 顶部导航栏 -->
+      <div class="top-nav">
+        <button class="back-button" onclick="navigateToPage('index.html')">返回首页</button>
+        <div class="nav-title">家属端</div>
+        <div style="width: 80px;"></div>
+      </div>
+      
+      <!-- 顶部资讯滚动区域 -->
+      <div class="news-section">
+        <div class="news-container" id="newsContainer">
+          <div class="news-item">
+            <div>
+              <h3>社区消息</h3>
+              <p>本周社区将举办养老健康讲座，欢迎参加</p >
+            </div>
+          </div>
+          <div class="news-item">
+            <div>
+              <h3>健康科普</h3>
+              <p>老年人秋季养生指南，助您健康度过秋天</p >
+            </div>
+          </div>
+          <div class="news-item">
+            <div>
+              <h3>活动通知</h3>
+              <p>下周将组织老年人户外健身活动</p >
+            </div>
+          </div>
+        </div>
+        <div class="news-nav left" onclick="scrollNews(-1)">&lt;</div>
+        <div class="news-nav right" onclick="scrollNews(1)">&gt;</div>
+      </div>
+      
+      <!-- 功能方块区域 -->
+      <div class="features-section">
+        <div class="features-grid">
+          <div class="feature-item">
+            <div class="feature-icon">🔒</div>
+            <div class="feature-label">隐私</div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-icon">❤️</div>
+            <div class="feature-label">心率</div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-icon">🧠</div>
+            <div class="feature-label">心理</div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-icon">🏃</div>
+            <div class="feature-label">活动</div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-icon">💤</div>
+            <div class="feature-label">睡眠</div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-icon">🍎</div>
+            <div class="feature-label">饮食</div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-icon">📅</div>
+            <div class="feature-label">日程</div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-icon">📞</div>
+            <div class="feature-label">联系</div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- 月报区域 -->
+      <div class="report-section">
+        <div class="report-card">
+          <h3>点击查看每月周报</h3>
+        </div>
+      </div>
+      
+      <!-- 知识推送区域 -->
+      <div class="knowledge-section">
+        <div class="knowledge-item">
+          <div class="knowledge-title">老年人如何保持心理健康</div>
+          <div class="knowledge-content">保持社交活动，培养兴趣爱好，定期体检...</div>
+        </div>
+        <div class="knowledge-item">
+          <div class="knowledge-title">适合老年人的运动方式</div>
+          <div class="knowledge-content">散步、太极、瑜伽等低强度运动有助于保持健康...</div>
+        </div>
+        <div class="knowledge-item">
+          <div class="knowledge-title">老年人饮食注意事项</div>
+          <div class="knowledge-content">均衡营养，多吃蔬菜水果，适量摄入蛋白质...</div>
+        </div>
+      </div>
+      
+      <!-- 底部菜单 -->
+      <div class="bottom-menu">
+        <div class="menu-item">
+          <div class="menu-icon">🏠</div>
+          <div>主页</div>
+        </div>
+        <div class="menu-item">
+          <div class="menu-icon">🤖</div>
+          <div>AI咨询</div>
+        </div>
+        <div class="menu-item">
+          <div class="menu-icon">👤</div>
+          <div>我的</div>
+        </div>
+      </div>
+    </div>
+    
+    <script>
+      // 页面跳转函数
+      function navigateToPage(url) {
+        // 添加页面过渡效果
+        document.body.style.opacity = '0';
+        document.body.style.transition = 'opacity 0.5s ease';
+        
+        setTimeout(() => {
+          window.location.href = url;
+        }, 500);
+      }
+      
+      let currentNewsIndex = 0;
+      const newsContainer = document.getElementById('newsContainer');
+      const newsItems = newsContainer.children;
+      
+      function scrollNews(direction) {
+        currentNewsIndex = (currentNewsIndex + direction + newsItems.length) % newsItems.length;
+        updateNewsPosition();
+      }
+      
+      function updateNewsPosition() {
+        newsContainer.style.transform = `translateX(-${currentNewsIndex * 100}%)`;
+      }
+      
+      // 自动滚动
+      setInterval(() => {
+        scrollNews(1);
+      }, 3000);
+    </script>
+  </body>
+</html>
