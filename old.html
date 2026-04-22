@@ -2019,6 +2019,64 @@
             }
         }
         
+        // 本地状态存储键名（家属端会读取）
+        const ELDER_STATUS_KEY = 'carelink_elder_status';
+
+        // 安全解析 JSON，避免 localStorage 脏数据导致页面报错
+        function safeParseJSON(value, fallback = null) {
+            if (!value) return fallback;
+            try {
+                return JSON.parse(value);
+            } catch (error) {
+                console.warn('解析本地状态失败，已回退默认值:', error);
+                return fallback;
+            }
+        }
+
+        // 格式化日期：YYYY-MM-DD
+        function formatDate(date = new Date()) {
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const day = String(date.getDate()).padStart(2, '0');
+            return `${year}-${month}-${day}`;
+        }
+
+        // 格式化时间：YYYY-MM-DD HH:mm:ss
+        function formatDateTime(date = new Date()) {
+            const datePart = formatDate(date);
+            const hours = String(date.getHours()).padStart(2, '0');
+            const minutes = String(date.getMinutes()).padStart(2, '0');
+            const seconds = String(date.getSeconds()).padStart(2, '0');
+            return `${datePart} ${hours}:${minutes}:${seconds}`;
+        }
+
+        // 统一保存老人端互动状态，供家属端读取
+        function saveElderInteraction(question, answer, source) {
+            const now = new Date();
+            const today = formatDate(now);
+            const previous = safeParseJSON(localStorage.getItem(ELDER_STATUS_KEY), {});
+            const keywords = ['救命', '摔倒', '不舒服', '胸痛', '头晕', '紧急', '求助', '急救', '打电话'];
+            const combinedText = `${question || ''} ${answer || ''}`;
+            const hasRisk = keywords.some((keyword) => combinedText.includes(keyword));
+            const todayInteractionCount = previous.date === today
+                ? (Number(previous.todayInteractionCount) || 0) + 1
+                : 1;
+
+            const status = {
+                date: today,
+                todayInteractionCount,
+                lastQuestion: question || '',
+                lastAnswer: answer || '',
+                lastInteractionTime: formatDateTime(now),
+                lastSource: source || '',
+                // 当前对话出现风险词则置为 true；无风险词则保持 false
+                needsAttention: hasRisk,
+                helpTriggered: hasRisk
+            };
+
+            localStorage.setItem(ELDER_STATUS_KEY, JSON.stringify(status));
+        }
+
         // 处理语音输入
         async function processVoiceInput(text) {
             if (!text || text.trim() === '') {
@@ -2031,6 +2089,7 @@
             try {
                 showFeedback('正在处理您的问题...');
                 const answer = await AIHealthAPI.sendMessage(text);
+                saveElderInteraction(text, answer, 'voice');
                 speakAnswer(answer); // 播放AI回答（包含文字显示）
             } catch (error) {
                 showFeedback(`请求失败：${error.message}\n请在登录页面配置API设置`);
@@ -2047,6 +2106,7 @@
                 
                 try {
                     const answer = await AIHealthAPI.sendMessage(text);
+                    saveElderInteraction(text, answer, 'text');
                     speakAnswer(answer); // 播放AI回答（包含文字显示）
                 } catch (error) {
                     showFeedback(`请求失败：${error.message}\n请在登录页面配置API设置`);
